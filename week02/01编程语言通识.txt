@@ -1,0 +1,59 @@
+
+// BNF
+
+// winter
+<Number> = "0" | "1" | "2" | ..... | "9"
+
+<DecimalNumber> = "0" | (("1" | "2" | ..... | "9") <Number>* )
+
+<PrimaryExpression> = <DecimalNumber> |
+    "(" <LogicalExpression> ")"
+
+<MultiplicativeExpression> = <PrimaryExpression> | 
+    <MultiplicativeExpression> "*" <PrimaryExpression>| 
+    <MultiplicativeExpression> "/" <PrimaryExpression>
+
+<AdditiveExpression> = <MultiplicativeExpression> | 
+    <AdditiveExpression> "+" <MultiplicativeExpression>| 
+    <AdditiveExpression> "-" <MultiplicativeExpression>
+
+<LogicalExpression> = <AdditiveExpression> | 
+    <LogicalExpression> "||" <AdditiveExpression> | 
+    <LogicalExpression> "&&" <AdditiveExpression>
+
+
+"a"
+
+"b"
+
+<Number> = "0" | "1" | "2" | .... | "9"
+
+<DecimalNumber> = "0" | ( ( "1"| "2" | "3" | .... | "9" ) <Number>*)
+
+<AdditiveExpression>
+
+
+0型 无限制型文法
+
+<a> <b> ::= "c" <d>
+
+1型 上下文相关文法
+
+"a" <b> "c" ::= "a" "x" "c"
+
+"```四则运算\n"<LogicalExpression>"```" = "```四则运算\n"
+    (<AdditiveExpression> | 
+    <LogicalExpression> "||" <AdditiveExpression> | 
+    <LogicalExpression> "&&" <AdditiveExpression>) "```"
+
+2型 上下文无关文法
+
+
+3型 正则文法
+
+
+
+// ABNF
+
+
+// 图灵完备性
