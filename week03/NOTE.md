@@ -2,6 +2,16 @@
 
 ## 表达式，类型转换
 
+    |            | Null  |  Undefiend | Boolean  |  String     | Number  |    Object   | Symbol  |
+    |  ----      | ----  |            |          |             |         |             |         |
+    | Null       |   -   |            |          |             |         |             |         |  
+    | Undefiend  |   -   |            |          |             |         |             |         |
+    | Boolean    |   -   |            |          |             |         |             |         |
+    | String     |   -   |            |          |             |         |             |         |
+    | Number     |   -   |            |          |             |         |             |         |
+    | Object     |   -   |            |          |             |         |             |         |
+    | Symbol     |   -   |            |          |             |         |             |         |
+
 ## 语句，对象
 
     * Atom
