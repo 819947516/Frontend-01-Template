@@ -97,6 +97,7 @@ class ResponseParser{
         }
     }
     receiveChar(char){
+        // 接受status line 过程
         if(this.current === this.WAITING_STATUS_LINE){
             if(char === '\r'){
                 this.current = this.WAITING_STATUS_LINE_END;
