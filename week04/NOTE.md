@@ -21,3 +21,5 @@
     * Declarative Environment Record 
         + Function Environment Record
         + Module Environment Record
+
+### Environment Record和Scope的区别
