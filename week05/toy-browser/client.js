@@ -97,8 +97,7 @@ class ResponseParser{
         }
     }
     receiveChar(char){
-        // 接受status line 过程
-        if(this.current === this.WAITING_STATUS_LINE){
+        if(this.current === this.WAITING_STATUS_LINE){ // 接受status line 过程
             if(char === '\r'){
                 this.current = this.WAITING_STATUS_LINE_END;
             }else if(char === '\n'){
@@ -106,14 +105,14 @@ class ResponseParser{
             }else{
                 this.statusLine += char;
             }   
-        }else if(this.current === this.WAITING_STATUS_LINE_END){
+        }else if(this.current === this.WAITING_STATUS_LINE_END){  // status line结束过程
             if(char === '\n'){
                 this.current = this.WAITING_HEADER_NAME;
             }
-        }else if(this.current === this.WAITING_HEADER_NAME){
-            if(char === ":"){
+        }else if(this.current === this.WAITING_HEADER_NAME){  // 进入headers name过程
+            if(char === ":"){ // ： 切换状态
                 this.current = this.WAITING_HEADER_SPACE;
-            }else if(char === "\r"){
+            }else if(char === "\r"){ // 进入headers name 第一个字符就是/r时，标识进入body和header之间的换行过程
                 this.current = this.WAITING_HEADER_BLOCK_END;
                 if(this.headers['Transfer-Encoding'] === "chunked"){
                     this.bodyParser = new TrunkedResponseParser();
@@ -121,22 +120,22 @@ class ResponseParser{
             }else{
                 this.headerName += char;
             }
-        }else if(this.current === this.WAITING_HEADER_SPACE){
+        }else if(this.current === this.WAITING_HEADER_SPACE){ // header name过程时 ：后面接空格 标识进入header value
             if(char === " "){
                 this.current = this.WAITING_HEADER_VALUE;
             }
-        }else if(this.current === this.WAITING_HEADER_VALUE){
+        }else if(this.current === this.WAITING_HEADER_VALUE){ // 进入 header value过程
             if(char === "\r"){
-                this.current = this.WAITING_HEADER_LINE_END;
+                this.current = this.WAITING_HEADER_LINE_END; // 进入 header value 一行结束过程
                 this.headers[this.headerName] = this.headerValue; 
                 this.headerName = "";
                 this.headerValue = "";
             }else{
                 this.headerValue += char;
             }
-        }else if(this.current === this.WAITING_HEADER_LINE_END){
-            if(char === '\n'){
-                this.current = this.WAITING_HEADER_NAME;
+        }else if(this.current === this.WAITING_HEADER_LINE_END){ // header value 一行结束后
+            if(char === '\n'){ // header value 一行结束后是否多行判断
+                this.current = this.WAITING_HEADER_NAME; 
             }
         }else if(this.current === this.WAITING_HEADER_BLOCK_END){
             if(char === '\n'){
@@ -155,36 +154,39 @@ class TrunkedResponseParser{
         this.READING_TRUNK = 2;
         this.WAITING_NEW_LINE = 3;
         this.WAITING_NEW_LINE_END = 4;
+
         this.length = 0;
-        this.content = []; 
+        this.content = []; // 字符串加法运算性能较差，一般用数组
         this.isFinished = false;
         this.current = this.WAITING_LENGTH;
     }
     receiveChar(char){
-        //console.log(JSON.stringify(char))
-        if(this.current === this.WAITING_LENGTH){
-            if(char === '\r'){
-                if(this.length === 0){
+        console.log(JSON.stringify(char))
+        if(this.current === this.WAITING_LENGTH){ // body 长度那行
+            if(char === '\r'){ // 如果长度行后面接空格，标识长度行结束
+                if(this.length === 0){ // 同时长度为0，标识整个body结束
                     this.isFinished = true;
                 }
                 this.current = this.WAITING_LENGTH_LINE_END;
             }else{
+                // 计算长度10进制，进一位
                 this.length *= 10;
                 this.length += char.charCodeAt(0) - '0'.charCodeAt(0);
+                console.log(this.length)
             }   
-        }else if(this.current === this.WAITING_LENGTH_LINE_END){
-            if(char === '\n'){
+        }else if(this.current === this.WAITING_LENGTH_LINE_END){ // 长度行结束
+            if(char === '\n'){ // 进入长度行下面的内容行
                 this.current = this.READING_TRUNK;
             }
         }else if(this.current === this.READING_TRUNK){
-            if(this.length !== 0 ){ 
+            if(this.length !== 0 ){ // 拼接内容
                 this.content.push(char);
                 this.length --;
             }
-            if(this.length === 0){
+            if(this.length === 0){ // 内容行拼接结束，进入下一个长度行
                 this.current = this.WAITING_NEW_LINE;
             }
-        }else if(this.current === this.WAITING_NEW_LINE){
+        }else if(this.current === this.WAITING_NEW_LINE){ // 进入新的长度行前会换行
             if(char === '\r'){
                 this.current = this.WAITING_NEW_LINE_END;
             }
