@@ -28,6 +28,7 @@ class Requset {
     }
  
     send(connection) {
+        const parser = new ResponseParser;
         return new Promise((resolve, reject) => {
             if(connection){
                 connection.write(this.toString());
@@ -40,7 +41,11 @@ class Requset {
                 })
             }
             connection.on('data', (data) => {
-                resolve(data.toString());
+                // resolve(data.toString());
+                parser.receive(data.toString());
+                if(parser.isFinished){
+                    resolve(parser.response);
+                }
                 connection.end();
             });
             connection.on('error', (err) => {
@@ -95,8 +100,8 @@ class ResponseParser{
         if(this.current === this.WAITING_STATUS_LINE){
             if(char === '\r'){
                 this.current = this.WAITING_STATUS_LINE_END;
-            }else if(char === '\n'){ //这句需要吗？
-                this.current = this.WAITING_HEADER_NAME; //难道服务器会输出没有status line直接进入headers的情况？
+            }else if(char === '\n'){
+                this.current = this.WAITING_HEADER_NAME; 
             }else{
                 this.statusLine += char;
             }   
@@ -122,7 +127,7 @@ class ResponseParser{
         }else if(this.current === this.WAITING_HEADER_VALUE){
             if(char === "\r"){
                 this.current = this.WAITING_HEADER_LINE_END;
-                this.headers[this.headerName] = this.headerValue; // 存进headers
+                this.headers[this.headerName] = this.headerValue; 
                 this.headerName = "";
                 this.headerValue = "";
             }else{
@@ -130,7 +135,7 @@ class ResponseParser{
             }
         }else if(this.current === this.WAITING_HEADER_LINE_END){
             if(char === '\n'){
-                this.current = this.WAITING_HEADER_NAME; // 循环进入查找headername状态
+                this.current = this.WAITING_HEADER_NAME;
             }
         }else if(this.current === this.WAITING_HEADER_BLOCK_END){
             if(char === '\n'){
@@ -150,12 +155,12 @@ class TrunkedResponseParser{
         this.WAITING_NEW_LINE = 3;
         this.WAITING_NEW_LINE_END = 4;
         this.length = 0;
-        this.content = []; //字符串加号运算性能相对较差，所以用数组
+        this.content = []; 
         this.isFinished = false;
         this.current = this.WAITING_LENGTH;
     }
     receiveChar(char){
-        //console.log(JSON.stringify(char)) //可以打印出\n \r字符
+        //console.log(JSON.stringify(char))
         if(this.current === this.WAITING_LENGTH){
             if(char === '\r'){
                 if(this.length === 0){
@@ -171,7 +176,7 @@ class TrunkedResponseParser{
                 this.current = this.READING_TRUNK;
             }
         }else if(this.current === this.READING_TRUNK){
-            if(this.length !== 0 ){ //去掉最后边的\r\n
+            if(this.length !== 0 ){ 
                 this.content.push(char);
                 this.length --;
             }
