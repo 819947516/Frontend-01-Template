@@ -1,5 +1,5 @@
 const net = require('net')
-
+const parser = require('./parser.js')
 class Requset {
     // method, url = host + port + path
     // body: k/v
@@ -173,7 +173,7 @@ class TrunkedResponseParser{
                 this.length *= 16;
                 // this.length += char.charCodeAt(0) - '0'.charCodeAt(0);
                 this.length += parseInt(char, 16);
-                console.log(this.length)
+
             }   
         }else if(this.current === this.WAITING_LENGTH_LINE_END){ // 长度行结束
             if(char === '\n'){ // 进入长度行下面的内容行
@@ -214,6 +214,8 @@ void async function() {
         }
     });
     let response = await requset.send();
+
+    let dom = parser.parseHTML(response)
     console.log(response)
 }()
 
