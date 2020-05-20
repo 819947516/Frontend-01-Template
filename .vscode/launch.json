@@ -8,7 +8,7 @@
         "type": "node",
         "request": "launch",
         "name": "Launch Program",
-        "program": "${workspaceFolder}/week06/state-machine/homework.js",
+        "program": "${workspaceFolder}/week06/toy-browser/client.js",
         "skipFiles": [
             "<node_internals>/**"
         ]

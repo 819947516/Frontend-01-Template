@@ -161,7 +161,7 @@ class TrunkedResponseParser{
         this.current = this.WAITING_LENGTH;
     }
     receiveChar(char){
-        console.log(JSON.stringify(char))
+        // console.log(JSON.stringify(char))
         if(this.current === this.WAITING_LENGTH){ // body 长度那行
             if(char === '\r'){ // 如果长度行后面接空格，标识长度行结束
                 if(this.length === 0){ // 同时长度为0，标识整个body结束
@@ -213,10 +213,11 @@ void async function() {
             name: 'LeeJ'
         }
     });
-    let response = await requset.send();
+    let response = await requset.send(); // 发送http请求
+    let dom = parser.parserHTML(response.body); // 根据response构建dom
 
-    let dom = parser.parseHTML(response)
-    console.log(response)
+    console.log(dom)
+
 }()
 
 /*
