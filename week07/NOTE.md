@@ -1,1 +1,47 @@
-# 每周总结可以写在这里
+# week07
+
+## 重学CSS
+
+### css语法研究
+
+css2.1的语法:
+Grammer css产生式
+![alt 属性文本](./Css-Syntax.png)
+
+#### 简单版本总体结构
+
+    @charset
+    @import
+    rules
+        @media
+        @page
+        rule
+
+#### at-rules
+
+    @charset
+    @import
+    @media
+    @page
+    @counter-style
+    @keyframes
+    @fontface
+    @supports
+    @namespace
+
+#### rules
+
+    selector
+    Declaration
+        key
+            property
+            variables
+        value
+
+### 兼容性
+
+[手机淘宝的flexible设计与实现](http://www.html-js.com/article/2402)
+
+### Tips
+
+* 块格式化上下文（Block Formatting Context，BFC） 是Web页面的可视CSS渲染的一部分，是块盒子的布局过程发生的区域，也是浮动元素与其他元素交互的区域。([BFC](https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context))

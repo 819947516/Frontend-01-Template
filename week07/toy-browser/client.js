@@ -1,5 +1,8 @@
 const net = require('net')
 const parser = require('./parser.js')
+const images = require('images')
+const render = require('./render')
+
 class Requset {
     // method, url = host + port + path
     // body: k/v
@@ -215,8 +218,11 @@ void async function() {
     });
     let response = await requset.send(); // 发送http请求
     let dom = parser.parserHTML(response.body); // 根据response构建dom
+    // console.log(dom)
 
-    console.log(dom)
+    let viewport = images(800, 600)
+    render(viewport, dom)
+    viewport.save('viewport.jpg')
 
 }()
 
