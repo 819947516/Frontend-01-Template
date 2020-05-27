@@ -415,10 +415,7 @@ const standards = [
         "url": "http://www.w3.org/TR/1998/NOTE-CSS-potential-19981210"
     }
 ]
-// let iframe = document.createElement('iframe')
-// document.body.innerHTML = ''
-// document.body.appendChild(iframe)
-// iframe.src = 'https://www.w3.org/TR/2020/WD-css-position-3-20200519'
+
 
 // var lis = document.getElementById('container').children
 // var standards = []
@@ -433,6 +430,10 @@ const standards = [
 // }
 // console.log(standards)
 
+// let iframe = document.createElement('iframe')
+// document.body.innerHTML = ''
+// document.body.appendChild(iframe)
+// iframe.src = 'https://www.w3.org/TR/2020/WD-css-position-3-20200519'
 
 let iframe = document.createElement("iframe");
 document.body.innerHTML = "";
