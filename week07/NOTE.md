@@ -1,5 +1,30 @@
 # week07
 
+## 浏览器工作原理
+
+### layout
+
+* layout执行位置在endTag处（针对flex布局简化），实际startTag处就存layout计算了（正常流）
+* flex 是一个CSS的display 属性中新添加一个值。 随着inline-flex的使用，它将使它适用的元素成为一个flex container（伸缩容器），而这个元素的每个子元素将成为 flex item（伸缩项目）。伸缩项目将参与到flex布局中，所有由CSS Flexible Box Layout Module（CSS伸缩盒布局模型）定义的属性都能被它们使用。(mdn)
+* flex container
+    flex-direction
+        row
+        row-reverse
+        column
+        column-reverse
+    flex-wrap
+* 收集元素: flex item
+* 主轴和交叉轴区分，主要要理解flex的属性对应的布局情况
+
+### render
+
+* 引入images库
+* 设置一个viewport，根据viewport和dom（排版好后的dom树）生成一张图片
+
+### Tips
+
+* 实际浏览器中，文字绘制需要依赖字体库
+
 ## 重学CSS
 
 ### css语法研究
