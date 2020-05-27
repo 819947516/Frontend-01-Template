@@ -416,25 +416,29 @@ const standards = [
     }
 ]
 
+// 1
+var lis = document.getElementById('container').children
+var standards = []
+for(let li of lis) {
+    if(li.getAttribute('data-tag').match(/css/)) {
+        li.children[1].innerText
+        standards.push({
+            name: li.children[1].innerText,
+            url: li.children[1].children[0].href
+        })
+    }
+}
+console.log(standards)
 
-// var lis = document.getElementById('container').children
-// var standards = []
-// for(let li of lis) {
-//     if(li.getAttribute('data-tag').match(/css/)) {
-//         li.children[1].innerText
-//         standards.push({
-//             name: li.children[1].innerText,
-//             url: li.children[1].children[0].href
-//         })
-//     }
-// }
-// console.log(standards)
 
-// let iframe = document.createElement('iframe')
-// document.body.innerHTML = ''
-// document.body.appendChild(iframe)
-// iframe.src = 'https://www.w3.org/TR/2020/WD-css-position-3-20200519'
+// 2
+let iframe = document.createElement('iframe')
+document.body.innerHTML = ''
+document.body.appendChild(iframe)
+iframe.src = 'https://www.w3.org/TR/2020/WD-css-position-3-20200519'
 
+
+// 3
 let iframe = document.createElement("iframe");
 document.body.innerHTML = "";
 document.body.appendChild(iframe);
