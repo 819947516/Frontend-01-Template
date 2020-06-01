@@ -53,16 +53,16 @@ function layout(element) {
         style.alignContent = 'center'
   
     let
-      mainSize, // 主轴size width / height
-      mainStart, // 主轴起点 left / right / top / bottom
-      mainEnd, // 主轴终点 left / right / top / bottom
-      mainSign, // 主轴符号位，用于 是否 reverse +1 / -1
-      mainBase, // 主轴开始的位置 0 / style.width
-      crossSize, // 交叉轴size
-      crossStart, // 交叉轴坐标起点
-      crossEnd, // 交叉轴坐标终点
-      crossSign, // 交叉轴符号位，用于 是否 reverse
-      crossBase; // 交叉轴开始的位置
+        mainSize, // 主轴size width / height
+        mainStart, // 主轴起点 left / right / top / bottom
+        mainEnd, // 主轴终点 left / right / top / bottom
+        mainSign, // 主轴符号位，用于 是否 reverse +1 / -1
+        mainBase, // 主轴开始的位置 0 / style.width
+        crossSize, // 交叉轴size
+        crossStart, // 交叉轴坐标起点
+        crossEnd, // 交叉轴坐标终点
+        crossSign, // 交叉轴符号位，用于 是否 reverse
+        crossBase; // 交叉轴开始的位置
   
     if (style.flexDirection === 'row') {
         mainSize = 'width'
@@ -117,7 +117,7 @@ function layout(element) {
     }
     // 主轴加入元素开始
     let isAutoMainSize = false
-    if (!style[mainSize]) { // auto sizing
+    if (!style[mainSize]) {
         elementStyle[mainSize] = 0
         for (let i = 0; i < items.length; i++) {
             let item = items[i]
@@ -137,13 +137,12 @@ function layout(element) {
         const item = items[i]
         const itemStyle = getStyle(item)
     
-        // 单个元素 mainSize
+    
         if (itemStyle[mainSize] === null) {
             itemStyle[mainSize] = 0
         }
     
         if (itemStyle.flex) {
-            // mainSpace 不做处理
             flexLine.push(item)
         } else if (style.flexWrap === 'nowrap' && isAutoMainSize) {
             mainSpace -= itemStyle[mainSize]
@@ -152,11 +151,10 @@ function layout(element) {
             }
             flexLine.push(item)
         } else {
-            // 当前flex item自适应
             if (itemStyle[mainSize] > style[mainSize]) {
                 itemStyle[mainSize] = style[mainSize]
             }
-            // 当前flex item另起新行
+            // 另起一行
             if (mainSpace < itemStyle[mainSize]) {
                 flexLine.mainSpace = mainSpace
                 flexLine.crossSpace = crossSpace
@@ -167,7 +165,7 @@ function layout(element) {
         
                 mainSpace = style[mainSize]
                 crossSpace = 0
-            } else { // flex item添加入行 
+            } else { 
                 flexLine.push(item)
             }
             // 处理交叉轴 撑开
@@ -186,9 +184,9 @@ function layout(element) {
         flexLine.crossSpace = crossSpace
     }
   
+    //  mainSpace空间不够， 所有该行 flex item 等比例缩放
+    // 未设置 flex-shrink 默认值是1(所有的 flex item都会收缩)
     if (mainSpace < 0) {
-        //  mainSpace空间不够， 所有该行 flex item 等比例缩放
-        // 未设置 flex-shrink 默认值是1(所有的 flex item都会收缩)
         const scale = style[mainSize] / (style[mainSize] - mainSpace)
         let currentMain = mainBase
         for (let i = 0; i < items.length; i++) {
