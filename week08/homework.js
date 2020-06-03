@@ -73,8 +73,8 @@ function matchSel(selector, element) {
             let classFlag= false
             if(attr && attr.value){
                 let attrs = attr.value.split(' ')
-                for(let singleAttr of attrs){
-                    if(singleAttr === select.replace(".", '')){
+                for(let a of attrs){
+                    if(a === select.replace(".", '')){
                         classFlag = true
                         break
                     }
