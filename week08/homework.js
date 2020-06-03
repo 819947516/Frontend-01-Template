@@ -33,6 +33,7 @@ function match(selector, element) {
     var j = 1
 
     // 感觉有点奇怪 :)!
+    // 一层层找 找到最顶层dom结束
     let ele = element.parentNode
     while(ele !== document){
         if(matchSel(selectorParts[j], ele)) {
