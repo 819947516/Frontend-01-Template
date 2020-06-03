@@ -69,17 +69,17 @@ function matchSel(selector, element) {
                 if(at.name === "class") attr = at
                 break
             }
-            let classFound = false
+            let classFalt= false
             if(attr && attr.value){
                 let attrs = attr.value.split(' ')
                 for(let singleAttr of attrs){
                     if(singleAttr === select.replace(".", '')){
-                        classFound = true
+                        classFalt = true
                         break
                     }
                 }
             }
-            if(!classFound)
+            if(!classFalt)
                 return false
         }else{ // tag
             if(element.tagName !== select)
