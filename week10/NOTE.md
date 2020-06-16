@@ -20,12 +20,14 @@ range.setEndAfter
 range.selectNode
 range.selectNodeContents
 
-// range api 用来做什么
+// range api 用来做什么 适合海量执行和经起操作
 
 var fragment = range.extractContents() // 摘出range里面的内容，创建一个fragment，一种文档片段，当append fragment内的搜有子元素append上去，本身不会
 
 range.insertNode(document.creactTextNode('text')) // 在元素文本之间拆入内容，十分精细
 
 ```
+
+## CSSOM
 
 ## tictactoe
