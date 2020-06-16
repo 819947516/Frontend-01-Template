@@ -7,7 +7,7 @@ function filterOut(names, props) {
     return names.filter(e => !set.has(e));
 }
 
-// ECMA 262
+// ECMA 262  javaScript 全局对象
 {
     let js = new Set();
     let objects = ["globalThis", "console", "BigInt", "BigInt64Array", "BigUint64Array", "Infinity", "NaN", "undefined", "eval", "isFinite", "isNaN", "parseFloat", "parseInt", "decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent", "Array", "Date", "RegExp", "Promise", "Proxy", "Map", "WeakMap", "Set", "WeakSet", "Function", "Boolean", "String", "Number", "Symbol", "Object", "Error", "EvalError", "RangeError", "ReferenceError", "SyntaxError", "TypeError", "URIError", "ArrayBuffer", "SharedArrayBuffer", "DataView", "Float32Array", "Float64Array", "Int8Array", "Int16Array", "Int32Array", "Uint8Array", "Uint16Array", "Uint32Array", "Uint8ClampedArray", "Atomics", "JSON", "Math", "Reflect", "escape", "unescape"];
@@ -16,7 +16,7 @@ function filterOut(names, props) {
 
 }
 
-
+// Node子类
 names = names.filter( e => {
     try { 
         return !(window[e].prototype instanceof Node)
@@ -64,7 +64,7 @@ names = names.filter( e => !e.match(/^webkit/))
     names = names.filter(e => !interfaces.has(e));
 }
 
-//http://www.ecma-international.org/ecma-402/5.0/index.html#Title
+//http://www.ecma-international.org/ecma-402/5.0/index.html#Title  国际化相关
 
 names = names.filter(e => e != "Intl")
 
@@ -93,6 +93,6 @@ names = filterOut(names, ["SyncManager"]);
 
 
 
-console.log(names.length);
+console.log(names.toString());
 
 </script>

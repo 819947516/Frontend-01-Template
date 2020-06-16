@@ -21,6 +21,18 @@
                 element.append(children[i])
             }
         }
+
+        function reverseChildren2(element) {
+            let range = new Range()
+            range.selectNodeContents(element)
+            let fragment = range.extractContents()
+
+            // 反转 nodelist is living collection
+            while(l-- > 0) {
+                fragment.appendChild(fragment.childNodes[l])
+            }
+            element.appendChild(fragment)
+        }
     </script>
 </body>
 </html>
