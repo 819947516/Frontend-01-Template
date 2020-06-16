@@ -1,0 +1,8 @@
+range api 属于dom api
+
+range api运用场景
+1、精确操作元素
+2、海量执行
+
+CSSOM
+document.styleSheets

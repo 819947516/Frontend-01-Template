@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #id {
+            width: 350px;
+        }
+        .item {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #fff;
+            display: inline-block;
+            vertical-align: middle;
+            background-color: green;
+
+            line-height: 100px;
+            font-size: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id='id'></div>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script>
+        let pattern = [
+            [0, 0 ,0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+        let color = 1
+        function show(pattern) {
+            let divWraper = document.getElementById('id')
+            divWraper.innerHTML = ''
+            for(let y = 0; y < 3; y++) {
+                for(let x = 0; x < 3; x++) {
+                    let divItem = document.createElement('div')
+                    divItem.classList.add('item')
+                    divItem.innerHTML = 
+                        pattern[y][x] === 2 ? '❌' :
+                        pattern[y][x] === 1 ? '⭕' :
+                        ''
+                    divItem.addEventListener('click', () => move(x, y))
+
+                    divWraper.appendChild(divItem)
+                }
+            }
+        }
+        
+        function move(x, y) {
+            if(pattern[y][x] !== 0) return
+            pattern[y][x] = color
+            if(check(pattern, color)){
+                color === 1? alert('⭕ win') : alert('❌ win')
+            } 
+            color = 3 - color
+            show(pattern)
+        }
+
+        function check(pattern, color, x, y) {
+            // let win = true
+            // if(pattern[y].indexOf(3 - color) !== -1 ) {
+            //     win = false
+            // }
+
+            // 横排判断
+            for(let i = 0; i < 3; i++) {
+                let win = true
+                for(j = 0; j < 3; j++) {
+                    if(pattern[i][j] !== color) {
+                        win = false
+                    }
+                }
+                if(win) return true
+            }
+
+            // 竖排判断
+            for(let i = 0; i < 3; i++) {
+                let win = true
+                for(j = 0; j < 3; j++) {
+                    if(pattern[j][i] !== color) {
+                        win = false
+                    }
+                }
+                if(win) return true
+            }
+
+            // 交叉轴判断 左上至右下
+            {
+                let win = true
+                for(j = 0; j < 3; j++) {
+                    if(pattern[j][j] !== color) {
+                        win = false
+                    }
+                }
+                if(win) return true
+            }
+
+            // 交叉轴判断 右上至左下
+            {
+                let win = true
+                for(j = 0; j < 3; j++) {
+                    if(pattern[j][2-j] !== color) {
+                        win = false
+                    }
+                }
+                if(win) return true
+            }
+
+            return false
+        }
+         
+        function willWin() {
+
+        }
+
+        show(pattern)
+    </script>
+</body>
+</html>

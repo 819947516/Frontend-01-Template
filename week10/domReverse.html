@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="a">
+        <span>1</span>
+        <p>1</p>
+        <a>1</a>
+        <div>1</div>
+    </div>
+    <script>
+        let element = document.getElementById('a')
+
+        function reveerseChildren(element) {
+            let children = element.childNodes
+            for(let i = children.length - 1; i>=0; i-- ) {
+                element.append(children[i])
+            }
+        }
+    </script>
+</body>
+</html>
