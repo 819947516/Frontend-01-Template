@@ -78,7 +78,7 @@
             for(let i = 0; i < 10; i++) {
                 let win = false
                 let count = 0
-                for(j = 0; j < 10; j++) {
+                for(let j = 0; j < 10; j++) {
                     if(pattern[i][j] === color) {
                         count++
                         if(count >= 5){
@@ -96,7 +96,7 @@
             for(let i = 0; i < 10; i++) {
                 let win = false
                 let count = 0
-                for(j = 0; j < 10; j++) {
+                for(let j = 0; j < 10; j++) {
                     if(pattern[j][i] === color) {
                         count++
                         if(count >= 5){
@@ -116,7 +116,7 @@
                 for(i = 0; i <= 5; i++) {
                     let count1 = 0
                     let count2 = 0
-                    for(j = 0; j < 10; j++) {
+                    for(let j = 0; j < 10; j++) {
                         if(pattern[j][j+i] === color) {
                             count1 ++
                             if(count1 >= 5) {
@@ -147,7 +147,7 @@
                 for(i = 0; i <= 5; i++) {
                     let count1 = 0
                     let count2 = 0
-                    for(j = 0; j < 10; j++) {
+                    for(let j = 0; j < 10; j++) {
                         if(pattern[j-i] && pattern[j-i][9-j-i] === color) {
                             count1 ++
                             if(count1 >= 5) {

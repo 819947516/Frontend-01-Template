@@ -25,7 +25,6 @@
 <body>
     
     <div id='id'></div>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
     <script>
         let pattern = [
             [0, 0 ,0],
@@ -33,6 +32,30 @@
             [0, 0, 0]
         ]
         let color = 1
+
+        // 棋谱
+        let opennigs = new Map()
+
+        opennigs.set([
+            [0, 0 ,0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ].toString() + '1',{
+            point: [1, 1],
+            result: 0
+        })
+
+        opennigs.set([
+            [0, 0 ,0],
+            [0, 1, 0],
+            [0, 0, 0]
+        ].toString() + '2',{
+            point: [0, 0],
+            result: 0
+        })
+
+
+
         function show(pattern) {
             let divWraper = document.getElementById('id')
             divWraper.innerHTML = ''
@@ -44,19 +67,36 @@
                         pattern[y][x] === 2 ? '❌' :
                         pattern[y][x] === 1 ? '⭕' :
                         ''
-                    divItem.addEventListener('click', () => move(x, y))
+                    divItem.addEventListener('click', () => userMove(x, y))
 
                     divWraper.appendChild(divItem)
                 }
             }
         }
         
-        function move(x, y) {
+        function userMove(x, y) {
             if(pattern[y][x] !== 0) return
             pattern[y][x] = color
             if(check(pattern, color)){
                 color === 1? alert('⭕ win') : alert('❌ win')
             } 
+            color = 3 - color
+            show(pattern)
+            // if(willWin(pattern, color)) {
+            //     console.log(color === 1? '⭕ will win':'❌ will win')
+            // }
+            computerMove()
+        }
+
+        function computerMove() {
+            let choice = bestChoice(pattern, color)
+            console.log(choice)
+            if(choice.point) {
+                pattern[choice.point[1]][choice.point[0]] = color
+            }
+            if(check(pattern, color)){
+                color === 1? alert('⭕ win') : alert('❌ win')
+            }
             color = 3 - color
             show(pattern)
         }
@@ -70,7 +110,7 @@
             // 横排判断
             for(let i = 0; i < 3; i++) {
                 let win = true
-                for(j = 0; j < 3; j++) {
+                for(let j = 0; j < 3; j++) {
                     if(pattern[i][j] !== color) {
                         win = false
                     }
@@ -81,7 +121,7 @@
             // 竖排判断
             for(let i = 0; i < 3; i++) {
                 let win = true
-                for(j = 0; j < 3; j++) {
+                for(let j = 0; j < 3; j++) {
                     if(pattern[j][i] !== color) {
                         win = false
                     }
@@ -92,7 +132,7 @@
             // 交叉轴判断 左上至右下
             {
                 let win = true
-                for(j = 0; j < 3; j++) {
+                for(let j = 0; j < 3; j++) {
                     if(pattern[j][j] !== color) {
                         win = false
                     }
@@ -103,7 +143,7 @@
             // 交叉轴判断 右上至左下
             {
                 let win = true
-                for(j = 0; j < 3; j++) {
+                for(let j = 0; j < 3; j++) {
                     if(pattern[j][2-j] !== color) {
                         win = false
                     }
@@ -114,8 +154,79 @@
             return false
         }
          
-        function willWin() {
+        function clone(pattern) {
+            return JSON.parse(JSON.stringify(pattern))
+        }
 
+        function willWin(pattern, color) {
+            for(let i = 0; i < 3; i++) {
+                for(let j = 0; j < 3; j++) {
+                    if(pattern[i][j] !== 0) {
+                        continue                
+                    }
+                    let tmp = clone(pattern)
+                    // 走一步
+                    tmp[i][j] = color
+                    if(check(tmp, color)) {
+                        return [j, i]
+                    }
+                }
+            }
+            return null
+        }
+
+        // 来回递归判断
+        // function willLose(pattern, color) {
+        //     if(willWin(pattern, color)) {
+        //         return false
+        //     }
+        //     // for...
+        // }
+        // function willWin2(pattern, color) {
+        //     if(willLose(pattern, color)) {
+        //         return false
+        //     }
+        //     // for...
+        // }
+
+        function bestChoice(pattern, color) {
+            if(opennigs.has(pattern.toString() + color)) {
+                return opennigs.get(pattern.toString() + color)
+            }
+
+            let point = null
+            if(point = willWin(pattern, color)){
+                return {
+                    point: point,
+                    result: 1
+                }
+            }
+
+            // 对手最坏 我最好
+            let result = -1
+            outer:for(let i = 0; i < 3; i++) {
+                for(let j = 0; j < 3; j++) {
+                    if(pattern[i][j] !== 0) {
+                        continue                
+                    }
+                    let tmp = clone(pattern)
+                    // 走一步
+                    tmp[i][j] = color
+                    let opp = bestChoice(tmp, 3 - color)
+                    if(-opp.result >= result) {
+                        point = [j, i]
+                        result = -opp.result
+                    }
+                    if(result === 1) {
+                        break outer
+                    }
+                }
+            }
+
+            return {
+                point: point,
+                result: point? result : 0 // -1输了 0平 1赢
+            }
         }
 
         show(pattern)
