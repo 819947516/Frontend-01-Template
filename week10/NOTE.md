@@ -28,6 +28,54 @@ range.insertNode(document.creactTextNode('text')) // 在元素文本之间拆入
 
 ```
 
-## CSSOM
+* range api 适合海量执行，精细操作(通过range.setStartAfter range.setEndAfter)
+
+## CSSOM 不隶属DOM API
+
+* document.styleSheets 通过html语言 或者 Dom API 创建样式表
+* cssRules  玩具浏览器css parse分析css规则与之类似
+
+### Rules
+
+* document.styleSheets[0].cssRules
+* document.styleSheets[0].insertRule("p { color: #fff}", 0)  // inser 字符串
+* document.styleSheets[0].removeRule(0)
+
+### Rule
+
+* CSSStyleRule ---> 普通rule
+    selectorText String
+    style K-V结构
+* CSSCharsetRule
+* CSSImportRule
+* CSSMediaRule
+* CSSFontFaceRule
+* CSSPageRule
+* CSSNamespaceRule
+* CSSKeyframesRule
+* CSSKeyframeRule
+* CSSSupportsRule
+* ...
+
+``` js
+document.styleSheets[0].cssRules[0].style.color = 'red'  // cssom api 操作属性
+```
+
+### getComputedStyle
+
+window.getComputedStyle(elt, pseudoElt)
+
+* elt 想要获取的元素
+* pseudoElt 可选，伪元素
+
+### CSSOM View部分
+
+```js
+window.open("about:blank", "_blank", "width=100,height=100,left=100,top=100")
+childWindow.moveBy(-50, -50); // moveTo
+childWindow.resizeBy(50, 50); // resizeTo
+```
 
 ## tictactoe
+
+难点：递归判断bestChoice
