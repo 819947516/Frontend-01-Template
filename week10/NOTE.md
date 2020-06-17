@@ -74,6 +74,23 @@ window.getComputedStyle(elt, pseudoElt)
 window.open("about:blank", "_blank", "width=100,height=100,left=100,top=100")
 childWindow.moveBy(-50, -50); // moveTo
 childWindow.resizeBy(50, 50); // resizeTo
+
+window.scrollX // scroll系列
+window.scrollY
+window.scrollBy
+window.scrollTo
+
+element.scrollBy // 元素滚动系列与window存在差异
+element.scrollTo
+element.scrollTop
+element.scrollLeft
+element.scrollHeight / element.scrollWidth
+
+// 元素重要信息相关 适用于拖拽等操作
+element.getClientRects()[0]  // 直接获取准确位置    inline元素产生多个行盒 所以getClientRects()获取的是数组
+element.getBundingClientRect() // 获取一个整体，会根据实际渲染区域来获取，受外部滚动影响
+
+
 ```
 
 ## tictactoe
