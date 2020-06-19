@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红绿灯Generator</title>
+    <style>
+        .bulb {
+            background-color:grey;
+            display:inline-block;
+            margin:30px;
+            width:100px;
+            height:100px;
+            border-radius: 50px;;
+        }
+        .green.ligth {
+            background-color: green;
+        }
+        .yellow.ligth {
+            background-color: yellow;
+        }
+        .red.ligth {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="bulb green"></div>
+    <div class="bulb yellow"></div>
+    <div class="bulb red"></div>
+
+    <script>
+        function green() {
+            let bulbs = document.getElementsByClassName('bulb')
+            for(let i = 0; i < bulbs.length; i++) {
+                bulbs[i].classList.remove('ligth')
+            }
+            document.getElementsByClassName('green')[0].classList.add('ligth')
+        }
+        function yellow() {
+            let bulbs = document.getElementsByClassName('bulb')
+            for(let i = 0; i < bulbs.length; i++) {
+                bulbs[i].classList.remove('ligth')
+            }
+            document.getElementsByClassName('yellow')[0].classList.add('ligth')
+        }
+        function red() {
+            let bulbs = document.getElementsByClassName('bulb')
+            for(let i = 0; i < bulbs.length; i++) {
+                bulbs[i].classList.remove('ligth')
+            }
+            document.getElementsByClassName('red')[0].classList.add('ligth')
+        }
+        function sleep(time) {
+            return new Promise((resolve, reject) => {
+                setTimeout(resolve, time)
+            })
+        }
+
+
+        function* start() {
+            // green()
+            // sleep(1000).then(() => {
+            //     yellow()
+            //     return sleep(200)
+            // }).then(() => {
+            //     red()
+            //     return sleep(500) 
+            // }).then(() => {
+            //     start()
+            // })
+        }
+    </script>
+</body>
+</html>
