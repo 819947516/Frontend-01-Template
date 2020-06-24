@@ -1,52 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>寻路算法</title>
     <style>
         .cell {
-            width:6px;
-            height:6px;
+            width: 6px;
+            height: 6px;
             background-color: #ccc;
-            border-bottom:solid 1px white;
-            border-right:solid 1px white;
+            border-bottom: solid 1px white;
+            border-right: solid 1px white;
         }
-        #container{
-            width:701px;
+
+        #container {
+            width: 701px;
             display: flex;
             flex-wrap: wrap;
         }
     </style>
 </head>
+
 <body>
     <div id="container"></div>
     <button onclick="localStorage.map = JSON.stringify(map)">save</button>
     <script>
         let map = localStorage.map ? JSON.parse(localStorage.map) : new Array(10000).fill(0)
         let container = document.getElementById('container')
-        
-        for(let y = 0; y < 100; y++) {
-            for(let x = 0; x < 100; x++) {
+
+        for (let y = 0; y < 100; y++) {
+            for (let x = 0; x < 100; x++) {
                 let cell = document.createElement('div')
                 cell.classList.add('cell')
-                
-                if(map[y*100 + x] === 1)
-                    cell.style.backgroundColor = 'red'
+
+                if (map[y * 100 + x] === 1)
+                    cell.style.backgroundColor = 'black'
 
                 cell.addEventListener('mouseover', () => {
-                    if(mouse) {
-                        if(clear) {
+                    if (mouse) {
+                        if (clear) {
                             cell.style.backgroundColor = ''
-                            map[y*100 + x] = 0
+                            map[y * 100 + x] = 0
                         } else {
-                            cell.style.backgroundColor = 'red'
-                            map[y*100 + x] = 1
+                            cell.style.backgroundColor = 'black'
+                            map[y * 100 + x] = 1
                         }
                     }
                 })
-                
-                
                 container.appendChild(cell)
             }
         }
@@ -60,6 +61,170 @@
         document.addEventListener('mouseup', () => mouse = false)
 
         document.addEventListener('contextmenu', e => e.preventDefault()) // 阻止页面弹出选择框
+
+        class Sorted {
+            constructor(data, compare) {
+                this.data = data
+                this.compare = compare
+            }
+
+            take() { // 每次吐出一个有序的
+                if(!this.data.length)
+                    return
+                let min = this.data[0]
+                let minIndex = 0
+                for(let i = 0; i < this.data.length; i++) {
+                    if(this.compare(this.data[i], min) < 0) {
+                        min = this.data[i]
+                        minIndex = i
+                    }
+                }
+                this.data[minIndex] = this.data[this.data.length - 1]
+                this.data.pop()
+                return min
+            }
+
+            insert(v) {
+                this.data.push(v)
+            }
+
+            get length() {
+                return this.data.length
+            }
+        }
+        
+        // 数组表示二叉堆
+        // 一个节点与其叶子节点的关系 如：下标i节点 叶子节点是  i * 2 + 1 和 i * 2 + 2
+        class BinaryHeap {
+            constructor(data, compare) {
+                this.data = data
+                this.compare = compare
+            }
+
+            take() {
+                if(this.data.length) {
+                    return
+                }
+
+                let min = this.data[0]
+                let i = 0 // 被take出去的点
+                while(i < this.data.length) {
+                    // 边界情况
+                    if(i * 2 + 1 >= this.data.length) {
+                        break
+                    }
+                    if(i * 2 + 2 >= this.data.length) {
+                        this.data[i] = this.data[i * 2 + 1]
+                        i = i * 2 + 1
+                        break
+                    }
+                    
+                    if(this.compare(this.data[i * 2 + 1], this.data[i * 2 + 2]) < 0) {
+                        this.data[i] = this.data[i * 2 + 1]
+                        i = i * 2 + 1
+                    } else {
+                        this.data[i] = this.data[i * 2 + 2]
+                        i = i * 2 + 2
+                    }
+                }
+                if( i < this.data.length -1){
+                    this.insertAt(i, this.data.pop())
+                } else {
+                    this.data.pop()
+                }
+                return min
+
+            }
+
+            insertAt(i, v) {
+                this.data[i] = v
+                while(i > 0 && this.compare(v, Math.floor((i-1)/2)) < 0) {
+                    this.data[i] = this.data[Math.floor((i-1)/2)]
+                    this.data[Math.floor((i-1)/2)] = v
+                    i = Math.floor((i-1)/2)
+                }
+            }
+
+            insert(v) {
+                this.insertAt(this.data.length, v)
+            }
+
+            get length() {
+                return this.data.length
+            }
+        }
+        
+        function sleep(time) {
+            return new Promise((resolve, reject) => {
+                setTimeout(resolve, time)
+            })
+        }
+
+        /*
+        *   寻路思路：
+        *   1、从start点开始，判断是否为end点
+        *   2、不是则判断对应点的四周的点（将四周的点加push入一个队列当中，每次从队列中取出一点判断）
+        *   3、找到end点后，存路径点
+        *   4、启发函数 直线距离作为最有距离 必定找到最优路径
+        */
+        async function path(map, start, end) {
+            // 浅拷贝一个数组
+            map = map.slice()
+
+            function distance([x, y]) {
+                return (x - end[0]) ** 2 + (y - end[1]) ** 2
+            }
+
+            // let queue = [start] // 用数组的化 队列 pop unshift  / push shift
+            let collection = new Sorted([start], (a, b) => distance(a) - distance(b))  // 队列存扩展的左边点
+
+            // 标记终点
+            container.children[end[1] * 100 + end[0]].style.backgroundColor = 'red'
+
+            // 插入队列方法 pre为他之前来源点
+            async function insert([x, y], pre) {
+                if (map[y * 100 + x] !== 0)  // 不是空白点
+                    return
+                if (x < 0 || y < 0 || x >= 100 || y >= 100) // 超出边界
+                    return
+                map[y * 100 + x] = pre // 记录从那个坐标点来
+                container.children[y * 100 + x].style.backgroundColor = 'lightgreen'
+                await sleep(1)
+                collection.insert([x, y])
+            }
+
+            while (collection.length) {
+                // 每次取一个点判断
+                let [x, y] = collection.take()
+                console.log(x, y)
+
+                // 找到end点
+                if(x === end[0] && y === end[1]) {
+                    let paths = []
+                    while(x !== start[0] || y !== start[1]) {
+                        paths.push([x, y])
+                        container.children[y * 100 + x].style.backgroundColor = 'pink'
+                        await sleep(1);  // 解构赋值时不带这个;号 有bug 奇怪 :)!
+                        [x, y] = map[y * 100 + x]
+                    }
+                    return paths
+                }
+                // 上下左右点push进去
+                await insert([x - 1, y], [x, y])
+                await insert([x + 1, y], [x, y])
+                await insert([x, y - 1], [x, y])
+                await insert([x, y + 1], [x, y])
+
+                // 斜向
+                await insert([x - 1, y + 1], [x, y])
+                await insert([x - 1, y - 1], [x, y])
+                await insert([x + 1, y + 1], [x, y])
+                await insert([x + 1, y - 1], [x, y])
+            }
+
+            return null
+        }
     </script>
 </body>
+
 </html>
