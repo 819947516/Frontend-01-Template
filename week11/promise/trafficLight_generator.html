@@ -29,6 +29,7 @@
     <div class="bulb yellow"></div>
     <div class="bulb red"></div>
 
+    <button id="next">next</button>
     <script>
         function green() {
             let bulbs = document.getElementsByClassName('bulb')
@@ -57,18 +58,69 @@
             })
         }
 
+        function happend(ele, eventName) {
+            return new Promise((resolve, reject) => {
+                ele.addEventListener(eventName, resolve, {once: true})
+            })
+        }
 
         function* start() {
-            // green()
-            // sleep(1000).then(() => {
-            //     yellow()
-            //     return sleep(200)
-            // }).then(() => {
-            //     red()
-            //     return sleep(500) 
-            // }).then(() => {
-            //     start()
-            // })
+            while(true) {
+                green()
+                yield sleep(1000)
+                yellow()
+                yield sleep(200)
+                red()
+                yield sleep(500)
+            }
+        }
+
+        // function co(iterator) {
+        //     let {value, done} = iterator.next()
+        //     console.log(value)
+        //     if(done) {
+        //         return
+        //     }
+            
+        //     if(value instanceof Promise ) {
+        //         value.then(() => {
+        //             co(iterator)
+        //         })  
+        //     }
+        // }
+        // co(start())
+
+        function run(iterator) {
+            let {value, done} = iterator.next()
+            console.log(value)
+            if(done) {
+                return
+            }
+            
+            if(value instanceof Promise ) {
+                value.then(() => {
+                    run(iterator)
+                })  
+            }
+        }
+        function co(generator) {
+            return function() {
+                return run(generator())
+            }
+        }
+
+
+
+        async function* g() {
+            let i = 0
+            while(true) {
+                await sleep(1000)
+                yield i++
+            }
+        }
+
+        for await(let v of g()) {
+            console.log(v)
         }
     </script>
 </body>

@@ -29,6 +29,7 @@
     <div class="bulb yellow"></div>
     <div class="bulb red"></div>
 
+    <button id="next">next</button>
     <script>
         function green() {
             let bulbs = document.getElementsByClassName('bulb')
@@ -57,18 +58,21 @@
             })
         }
 
+        function happend(ele, eventName) {
+            return new Promise((resolve, reject) => {
+                ele.addEventListener(eventName, resolve, {once: true})
+            })
+        }
 
         async function start() {
-            // green()
-            // sleep(1000).then(() => {
-            //     yellow()
-            //     return sleep(200)
-            // }).then(() => {
-            //     red()
-            //     return sleep(500) 
-            // }).then(() => {
-            //     start()
-            // })
+            while(true) {
+                green()
+                await happend(document.getElementById('next'), 'click')
+                yellow()
+                await happend(document.getElementById('next'), 'click')
+                red()
+                await happend(document.getElementById('next'), 'click')
+            }
         }
     </script>
 </body>
