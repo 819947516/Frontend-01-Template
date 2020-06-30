@@ -86,8 +86,7 @@
                 return AdditiveExpression(source)
             }
 
-            if(source[0].type === 'AdditiveExpression' &&
-            source.length > 1 && (source[1].type === '+' || source[1].type === '-')) {
+            if(source[0].type === 'AdditiveExpression' && source.length > 1 && (source[1].type === '+' || source[1].type === '-')) {
                 let node = {
                     type: 'AdditiveExpression',
                     children: [source.shift(), source.shift()]
@@ -118,8 +117,7 @@
                 return MultiplicativeExpression(source)
             }
 
-            if(source[0].type === 'MultiplicativeExpression' &&
-            source.length > 1 && (source[1].type === '*' || source[1].type === '/')) {
+            if(source[0].type === 'MultiplicativeExpression' && source.length > 1 && (source[1].type === '*' || source[1].type === '/')) {
                 let node = {
                     type: 'MultiplicativeExpression',
                     children: [source.shift(), source.shift(), source.shift()]
