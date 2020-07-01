@@ -1,4 +1,4 @@
-# String类型算法分析
+# String系列算法分析
 
 ## 正则分析string文本构建AST
 
