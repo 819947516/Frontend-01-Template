@@ -22,10 +22,9 @@
                 return;
             }
 
-            let i = 0; // source 位置
+            let i = 0;
             let lastIndex = 0;
 
-            // 匹配头
             for(i = 0; pattern[i] !== "*"; i++){
                 if(pattern[i] !== source[i] && pattern[i] !== "?")
                     return false;
@@ -47,7 +46,6 @@
                 lastIndex = reg.lastIndex;
             }
 
-            // 匹配尾巴
             for(let j = 0; j <= source.length - lastIndex && pattern[pattern.length - j] !== "*"; j++){
                 if(pattern[pattern.length - j] !== source[source.length - j] 
                     && pattern[pattern.length - j] !== "?")
