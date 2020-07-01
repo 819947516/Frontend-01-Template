@@ -12,7 +12,7 @@
             <Expression> ::=
                 <parenthesisExpression><EOF>
             
-            <parenthesisExpression> ::=
+            <ParenthesisExpression> ::=
                 <(><AdditiveExpression><)>
 
             <AdditiveExpression> ::=
@@ -69,12 +69,12 @@
                 source.unshift(node)
                 return node
             }
-            parenthesisExpression(source)
+            ParenthesisExpression(source)
             
             return Expression(source)
         }
 
-        function parenthesisExpression(source) {
+        function ParenthesisExpression(source) {
             if(source[0].type === '(') {}
             
         }
