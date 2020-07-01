@@ -9,6 +9,20 @@
 * lr :  左->右 移入 右->左 合并
 * 根据规范定义产生式来编写
 
+```js
+    // 四则运算产生式
+    <Expression> ::=
+        <AdditiveExpression><EOF>
+    <AdditiveExpression> ::=
+        <MultiplicativeExpression>
+        | <AdditiveExpression><+><MultiplicativeExpression>
+        | <AdditiveExpression><-><MultiplicativeExpression>
+    <MultiplicativeExpression> ::=
+        <Number>
+        |<MultiplicativeExpression><*><Number>
+        |<MultiplicativeExpression></><Number>
+```
+
 ### 字符串算法
 
 * 字典树
