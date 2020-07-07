@@ -45,10 +45,7 @@
         let reactivities = new Map()
         let useReactivities = []
 
-        let object = {
-            a: 1,
-            b: 2
-        }
+       
 
         function reactive(obj) {
             if(reactivities.has(obj)) {
@@ -111,90 +108,93 @@
         }
         
         // 1
-        // let dummy
-        // let proxy = reactive(object)
+        let object = {
+            a: 1,
+            b: 2
+        }
+        let dummy
+        let p0 = reactive(object)
 
-        // effect(() => dummy = proxy.a)
+        effect(() => dummy = p0.a)
 
-        // console.log(dummy)
-        // proxy.a = 2
-        // console.log(dummy)
+        console.log(dummy)
+        p0.a = 2
+        console.log(dummy)
 
 
         // 2
-        // let v1
-        // let v2
-        // let v12
-        // let p1 = reactive({
-        //     a: 1
-        // })
-        // let p2 = reactive({
-        //     a: 2
-        // })
+        let v1
+        let v2
+        let v12
+        let p1 = reactive({
+            a: 1
+        })
+        let p2 = reactive({
+            a: 2
+        })
 
-        // effect(() => v12 = p1.a + p2.a)
-        // effect(() => v1 = p1.a)
-        // effect(() => v2 = p2.a)
+        effect(() => v12 = p1.a + p2.a)
+        effect(() => v1 = p1.a)
+        effect(() => v2 = p2.a)
 
         // 3 
         // 当handler包含判断表达式, 如 if ?: 时，会出现问题，得手工加依赖关系
-        // let v
-        // let p = false
-        // effect(() => v = p ? 2 : p1.a)
-        // console.log(v)
-        // let p = true
-        // p1.a = 100
-        // console.log(v)
+        let v
+        let b = false
+        effect(() => v = b ? 2 : p1.a)
+        console.log(v)
+        b = true
+        p1.a = 100
+        console.log(v)
 
         // 4
         // obj中的obj
-        // let obj = {
-        //     a: {
-        //         x: 3
-        //     },
-        //     b: 1
-        // }
-        // let v3
-        // let p 
-        // let o = reactive(obj)
-        // effect(() => p = o.a.x)
-
-        // console.log(p)
-        // o.a = { x: 6 }  // 此处对象被替换
-        // console.log(p)
-        // o.a.x = 10  // 不会改变p
-        // console.log(p)
+        let obj = {
+            a: {
+                x: 3
+            },
+            b: 1
+        }
+        let v3
+        let p4 
+        let o = reactive(obj)
+        effect(() => p4 = o.a.x)
+        console.log(p4)
+        o.a = { x: 6 }  // 此处对象被替换
+        console.log(p4)
+        o.a.x = 10  // 不会改变p
+        console.log(p4)
 
         // 5
-        let p = reactive({
+        let p5 = reactive({
             r: 100,
             g: 100,
             b: 100
         })
 
         effect(() => {
-            document.getElementById('r').value = p.r
+            document.getElementById('r').value = p5.r
         })
         effect(() => {
-            document.getElementById('g').value = p.g
+            document.getElementById('g').value = p5.g
         })
         effect(() => {
-            document.getElementById('b').value = p.b
+            document.getElementById('b').value = p5.b
         })
 
         
         document.getElementById('r').addEventListener('input', e => {
-            p.r = e.target.value
+            p5.r = e.target.value
         })
         document.getElementById('g').addEventListener('input', e => {
-            p.g = e.target.value
+            p5.g = e.target.value
         })
         document.getElementById('b').addEventListener('input', e => {
-            p.b = e.target.value
+            p5.b = e.target.value
         })
 
 
-        effect(() => document.getElementById('box').style.backgroundColor = `rgb(${p.r},${p.g},${p.b})`)
+        effect(() => document.getElementById('box').style.backgroundColor = `rgb(${p5.r},${p5.g},${p5.b})`)
 
     </script>
 </body>
