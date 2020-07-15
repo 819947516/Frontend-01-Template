@@ -69,7 +69,6 @@ class Carousel {
             next.style.transform = `translateX(${500 -500*nextPositon}px)`
 
 
-
             let move = e => {
                 current.style.transform = `translateX(${e.clientX - startX -500*position}px)` 
                 last.style.transform = `translateX(${e.clientX - startX -500 -500*lastPositon}px)` 

@@ -13,7 +13,7 @@ export function create(Cls, attributes, ...children) {
 
     let visit = (children) => {
         for(let child of children) {
-            if(typeof child === "object" && child instanceof Array) {
+            if(Array.isArray(child)) {
                 visit(child)
                 continue
             }
