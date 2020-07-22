@@ -1,4 +1,6 @@
 import {create, Wrapper, Text} from './createElement'
+import { Timeline, Animation} from './animation/animation.js'
+import { cubicBezier } from './animation/cubicBezier.js'
 
 class Carousel {
     constructor(config) {
@@ -25,28 +27,50 @@ class Carousel {
         let root = <div class="carousel">
             { children }
         </div>
+        
+        let tl = new Timeline()
+        let ease = cubicBezier(.25,.1,.25,1)
+
         let position = 0
         let nextPic = () => {
             let nextPositon = (position + 1) % this.data.length
             let current = children[position]
             let next = children[nextPositon]
 
-            current.style.transition = 'ease 0s'
-            next.style.transition = 'ease 0s'
+            // current.style.transition = 'ease 0s'
+            // next.style.transition = 'ease 0s'
 
             // 初始位置
             current.style.transform = `translateX(${-100*position}%)` 
             next.style.transform = `translateX(${100 -100*nextPositon}%)`
-
-            setTimeout(function(){
-                current.style.transition = ''  // = '' means use css rule
-                next.style.transition = ''
-
-                current.style.transform = `translateX(${-100 -100*position}%)`
-                next.style.transform = `translateX(${-100*nextPositon}%)`
-
-                position = nextPositon
-            }, 16)  // 16 表示1帧
+            let currentAnimation = new Animation({
+                object: current.style,
+                property: 'transform',
+                template: v => `translateX(${v}%)`,
+                start: (-100*position),
+                end: (-100 -100*position),
+                duration: 500,
+                delay: 0,
+                timingFunction: ease
+            })
+            let nextAnimation = new Animation({
+                object: next.style,
+                property: 'transform',
+                template: v => `translateX(${v}%)`,
+                start: (100 -100*nextPositon),
+                end: (-100*nextPositon),
+                duration: 500,
+                delay: 0,
+                timingFunction: ease
+            })
+            tl.add(currentAnimation)
+            tl.add(nextAnimation)
+            tl.start()
+            position = nextPositon
+            // setTimeout(function(){
+                // current.style.transform = `translateX(${-100 -100*position}%)`
+                // next.style.transform = `translateX(${-100*nextPositon}%)`
+            // }, 16)  // 16 表示1帧
             setTimeout(nextPic, 3000)
         }
         root.addEventListener('mousedown', event => {
@@ -98,7 +122,7 @@ class Carousel {
             document.addEventListener('mousemove', move)
             document.addEventListener('mouseup', up)
         })
-        // setTimeout(nextPic, 3000)
+        setTimeout(nextPic, 3000)
         return root
     }
     

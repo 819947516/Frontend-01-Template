@@ -79,7 +79,6 @@ export class Timeline {
         this.animations.push(animation)
         animation.finished = false
         if(this.state === 'playing') {
-            console.log(animation)
             animation.addTime = addTime !== void 0 ? addTime : (Date.now() - this.startTime)
         } else {
             animation.addTime = addTime !== void 0 ? addTime : 0
