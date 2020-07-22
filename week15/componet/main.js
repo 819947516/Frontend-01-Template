@@ -29,6 +29,8 @@ class Carousel {
         </div>
         
         let tl = new Timeline()
+        tl.start()
+
         let ease = cubicBezier(.25,.1,.25,1)
 
         let position = 0
@@ -65,7 +67,7 @@ class Carousel {
             })
             tl.add(currentAnimation)
             tl.add(nextAnimation)
-            tl.start()
+            tl.tick()
             position = nextPositon
             // setTimeout(function(){
                 // current.style.transform = `translateX(${-100 -100*position}%)`
