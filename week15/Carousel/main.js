@@ -39,12 +39,7 @@ class Carousel {
             let current = children[position]
             let next = children[nextPositon]
 
-            // current.style.transition = 'ease 0s'
-            // next.style.transition = 'ease 0s'
-
             // 初始位置
-            current.style.transform = `translateX(${-100*position}%)` 
-            next.style.transform = `translateX(${100 -100*nextPositon}%)`
             let currentAnimation = new Animation({
                 object: current.style,
                 property: 'transform',
@@ -69,10 +64,6 @@ class Carousel {
             tl.add(nextAnimation)
             tl.tick()
             position = nextPositon
-            // setTimeout(function(){
-                // current.style.transform = `translateX(${-100 -100*position}%)`
-                // next.style.transform = `translateX(${-100*nextPositon}%)`
-            // }, 16)  // 16 表示1帧
             setTimeout(nextPic, 3000)
         }
         root.addEventListener('mousedown', event => {
