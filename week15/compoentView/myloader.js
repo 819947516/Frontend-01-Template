@@ -12,7 +12,7 @@ module.exports = function runtime(source, map) {
 
     for(let node of tree.children) {
         if(node.tagName == 'template') {
-            template = node
+            template = node.children.filter(e => e.type !== 'text')[0]
         }
 
         if(node.tagName == 'script') {
