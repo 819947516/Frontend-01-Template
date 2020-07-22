@@ -17,19 +17,19 @@ export class Timeline {
     }
 
     tick() {
-        let t = Date.now() - this.startTime
-        console.log(t)
+        let t = Date.now() - this.startTime 
+        // console.log(t)
         let animations = this.animations.filter(animation => !animation.finished)
         for(let animation of animations) {
-            let { object, property, template, start, end, delay, duration, timingFunction } = animation
-            let progression = timingFunction((t - delay) / duration) // 0 - 1之间
+            let { object, property, template, start, end, delay, duration, timingFunction, addTime } = animation
+            let progression = timingFunction((t - delay - addTime) / duration) // 0 - 1之间
 
-            if(t > duration + delay) {
+            if(t > duration + delay + addTime) {
                 progression = 1
                 animation.finished = true
             }
 
-            let value = start + progression * (end - start)
+            let value = animation.valueFromProgression(progression)
 
             object[property] = template(value)
         }
@@ -75,13 +75,14 @@ export class Timeline {
         this.tick()
     }
 
-    add(animation, startTime) {
+    add(animation, addTime) {
         this.animations.push(animation)
         animation.finished = false
         if(this.state === 'playing') {
-            animation.startTime = startTime || (Date.now() - this.startTime)
+            console.log(animation)
+            animation.addTime = addTime !== void 0 ? addTime : (Date.now() - this.startTime)
         } else {
-            animation.startTime = startTime || 0
+            animation.addTime = addTime !== void 0 ? addTime : 0
         }
     }
 }
@@ -108,8 +109,43 @@ export class Animation {
         this.timingFunction = timingFunction
         
     }
+
+    valueFromProgression(progression) {
+        return this.start + progression * (this.end - this.start)
+    }
 }
 
+export class ColorAnimation {
+    constructor({
+        object,
+        property,
+        template = (v => `rgba(${v.r}, ${v.g}, ${v.b}, ${v.a})`),
+        start,
+        end,
+        duration,
+        delay, 
+        timingFunction
+    }) {
+        this.object = object
+        this.property = property
+        this.template = template
+        this.start = start
+        this.end = end
+        this.duration = duration
+        this.delay = delay
+        this.timingFunction = timingFunction
+        
+    }
+
+    valueFromProgression(progression) {
+        return {
+            r: this.start.r + progression * (this.end.r - this.start.r),
+            g: this.start.g + progression * (this.end.g - this.start.g),
+            b: this.start.b + progression * (this.end.b - this.start.b),
+            a: this.start.a + progression * (this.end.a - this.start.a)
+        }
+    }
+}
 
 /*
     属性动画
