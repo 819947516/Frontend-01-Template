@@ -1,4 +1,4 @@
-# 手势
+# 手势 \ 完善Carousel
 
 * Tap
 * Pan
