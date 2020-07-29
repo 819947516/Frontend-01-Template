@@ -7,7 +7,8 @@
 </style>
 
 <div id="el"></div>
-
+<button onclick="start()">start</button>
+<button onclick="stop()">stop</button>
 <script>
     let el = document.getElementById('el')
     el.style.transition = 'ease 5s'
@@ -17,8 +18,13 @@
     }
 
     function stop() {
+        el.style.transform = getComputedStyle(el).transform
+
+        console.log(getComputedStyle(el).transform)
+
         el.style.transition = 'none'
-        el.style.transform = getComputedStyle(el).transform  // 已失效？？
+
+        // matrix(1, 0, 0, 1, 126.861, 126.861) 非常难以反解
     }
 
 </script>
