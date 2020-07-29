@@ -18,6 +18,54 @@
 * end
 * cancel
 
+```js
+// pc端抽象
+element.addEventListener('mousedown', (event) => {
+    start()
+    let mousemove = event => {
+        move()
+    }
+
+    let mouseend = event => {
+        end()
+        document.removeEventListener('mousemove', mousemove)
+        document.removeEventListener('mouseup', mouseend)
+    }
+
+    document.addEventListener('mousemove', mousemove)
+    document.addEventListener('mouseup', mouseend)
+})
+
+
+// 移动端抽象
+
+element.addEventListener('touchstart', event => {
+    // 可能多指
+    for(let touch of event.changedTouches) {
+        start()
+    }
+})
+
+element.addEventListener('touchmove', event => {
+    for(let touch of event.changedTouches) {
+        move()
+    }
+})
+
+element.addEventListener('touchend', event => {
+    for(let touch of event.changedTouches) {
+        end()
+    }
+})
+
+// 意外中断操作 如：alert
+element.addEventListener('touchcancel', event => {
+    for(let touch of event.changedTouches) {
+        cancel()
+    }
+})
+```
+
 ## 判断手势
 
 start ----(end)---> Tap
@@ -40,3 +88,9 @@ start ----(长按>0.5s)---> PressStart ----(end)----> PressEnd
 
 * 关键点在于offset，计算捡起时的偏移量 offset = currentTransformValue + 500 * currentPosition // 计算当前的偏移量
 * 通过当前元素偏移量计算出其他元素位置，从而赋值产生拖动效果
+* 时间线重启动画
+
+## 补充
+
+* matrix(1, 0, 0, 1, 126.861, 126.861) 非常难以反解 涉及矩阵相关
+* cubicBezier()方法构造特定变化形式 https://cubic-bezier.com/#.25,.1,.25,1
