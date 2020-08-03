@@ -15,11 +15,17 @@ module.exports = {
                     }
                 }
             }, 
+            // {
+            //     test: /\.css/,
+            //     use: {
+            //         loader: 'css-loader'
+            //     } 
+            // },
             {
-                test: /\.css/,
-                use: {
-                    loader: 'css-loader'
-                } 
+                test: /\.css/,  // 随便用什么 我用.vue有高亮舒服点 :)
+                use:{
+                    loader: require.resolve("./compiler/cssloader.js")
+                }
             }
         ]
     },

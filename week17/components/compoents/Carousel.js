@@ -4,7 +4,6 @@ import { EASE } from '../animation/cubicBezier'
 // import { enableGesture } from './gesture'
 
 import css from "./carousel.css"
-console.log(css)
 
 // let style = document.createElement('style')
 // style.innerHTML = css[0][1]
