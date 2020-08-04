@@ -22,7 +22,7 @@ module.exports = {
             //     } 
             // },
             {
-                test: /\.css/,  // 随便用什么 我用.vue有高亮舒服点 :)
+                test: /\.css/,
                 use:{
                     loader: require.resolve("./compiler/cssloader.js")
                 }
