@@ -39,7 +39,7 @@ stdin.setEncoding('utf8')
 
 function getChar() {
     return new Promise(resolve => {
-        stdin.on('data', function(key) {
+        stdin.once('data', function(key) {
             resolve(key)
         })
     })
@@ -63,9 +63,9 @@ function left(n = 1) {
 
 void async function() {
     stdout.write('what do you want to use?\n')
-    await select(['vue', 'react', 'angular'])
-
-
+    let answer = await select(['vue', 'react', 'angular'])
+    stdout.write('you selected ' + answer + ' \n')
+    process.exit()
     
 }()
 
@@ -92,10 +92,29 @@ async function select(choicesArr) {
         }
         // console.log(char.split('').map(c => c.charCodeAt(0)))
 
-        if(char === 'w') {
-            
+        if(char === 'w' && selected > 0) {
+            stdout.write(' ')
+            left()
+            selected--
+            up()
+            stdout.write('x')
+            left()
         }
+
+        if(char === 's' && selected < choicesArr.length - 1) {
+            stdout.write(' ')
+            left()
+            selected++
+            down()
+            stdout.write('x')
+            left()
+        }
+
+        if(char === '\r') {
+            down(choicesArr.length - selected)
+            left()
+            return choicesArr[selected]
+        }
+
     }
-
-
 }
