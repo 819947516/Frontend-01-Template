@@ -39,3 +39,33 @@
 
 * 主要是通过移动光标来处理用户输入内容
 * 需要熟悉相关api操作例如: stdin、stdout 等
+
+## 有意思
+
+### 在没有函数名字的函数里面实现递归 recursion
+
+```js
+
+g =>
+    (f => f(f))(
+      self =>
+        g( (...args) => self(self).apply(this, args) )
+    )(
+       self => {
+        return n => n > 0 ? self(n - 1) + n : 0
+        }
+    )
+
+
+let y = g =>
+    (f => f(f))(
+      self =>
+        g( (...args) => self(self).apply(this, args) )
+    )
+
+let f = y(self => {
+  return n => n > 0 ? self(n - 1) + n : 0
+})
+
+f(100)
+```
