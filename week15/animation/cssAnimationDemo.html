@@ -27,4 +27,12 @@
         // matrix(1, 0, 0, 1, 126.861, 126.861) 非常难以反解
     }
 
+    function printf (template, params) {
+        return template.replace(/\$\{([\s\S]+)\}/, (a, b)=>{
+            console.log(a)
+            console.log(b)
+            return params[b]
+        })
+    }
+
 </script>
