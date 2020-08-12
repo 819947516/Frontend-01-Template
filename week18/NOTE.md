@@ -7,9 +7,13 @@
     - build: webpack babel vue jsx postcss
     - watch: fsevent
     - mock: ...
-    - http: ws
+    - http: http-server
 
 * Client
 
     - debugger: devtool vscode
     - sourceMap
+
+## 链接
+
+    https://facebook.github.io/watchman/
