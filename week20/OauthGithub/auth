@@ -1,0 +1,78 @@
+
+// publish-tool 唤起浏览器
+// 1
+GET https://github.com/login/oauth/authorize
+
+req:
+let client_id = 'Iv1.d05e1636461d076a'
+let redirect_uri = encodeURIComponent('http://localhost:9091')
+let scope = encodeURIComponent('read:user')
+let state = '123abctest'
+
+https://github.com/login/oauth/authorize?client_id=Iv1.d05e1636461d076a&redirect_uri=http%3A%2F%2Flocalhost%3A8080&scope=read%3Auser&state=123abc
+
+
+res:
+http://localhost:8080/?code=06c16d6e07fe3dd2f01b&state=123abc
+
+// publish-server 服务器端进行
+// 2  
+
+POST https://github.com/login/oauth/access_token
+
+req:
+{
+    let code = 'd29b680f9ca34d0e6440'
+    let state = '123abc'
+    let client_id = 'Iv1.d05e1636461d076a'
+    let client_secret = '08be1fb7bc336f148a0aecb1c1a4fe817048ea77'
+    let redirect_uri = encodeURIComponent('http://localhost:8080')
+
+    let xhr = new XMLHttpRequest()
+
+    let params = `client_secret=${client_secret}&redirect_uri=${redirect_uri}&code=${code}&client_id=${client_id}&state=${state}`
+    let url = `https://github.com/login/oauth/access_token?${params}`
+
+    xhr.open('POST', url, true)
+    xhr.send(null)
+
+    xhr.addEventListener('readystatechange', function(event) {
+        if(xhr.readyState === 4) {
+            // debugger
+            console.log(xhr.responseText)
+        }
+    })
+}
+
+res:
+
+// LeeJ
+access_token=bc669d45a2d524206d670151bf4cae4b758e8d49&expires_in=28800&refresh_token=r1.f1ef540d5e2b673e0363b55d363a1a9def6f5092a83e436c93a05af31710a88540fe2738a91b214f&refresh_token_expires_in=15897600&scope=&token_type=bearer
+
+
+// XT
+access_token=56dcf003337f4389476173bae57423fa51854f5a&expires_in=28800&refresh_token=r1.47bb6eb5fbd21f32f8221560baf16bc1b7d3bd98813cab9920ad57b284357557be479cf09d72bbe7&refresh_token_expires_in=15897600&scope=&token_type=bearer
+
+// 3
+
+Authorization: token OAUTH-TOKEN
+GET https://api.github.com/user
+
+req:
+{
+    let access_token = 'token 56dcf003337f4389476173bae57423fa51854f5a'
+    let xhr = new XMLHttpRequest()
+
+    xhr.open('GET', 'https://api.github.com/user', true)
+    xhr.setRequestHeader('Authorization', access_token)
+    xhr.send(null)
+
+    xhr.addEventListener('readystatechange', function(event) {
+        if(xhr.readyState === 4) {
+            // debugger
+            console.log(xhr.responseText)
+        }
+    })
+}
+
+// 开源项目 https://justauth.wiki/#/quickstart/oauth
