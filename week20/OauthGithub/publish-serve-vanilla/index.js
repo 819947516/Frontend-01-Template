@@ -9,50 +9,14 @@ const server = http.createServer((req, res) => {
     if(req.url.match(/^\/auth/)) {
         return auth(req, res) 
     }
-    if(req.url.match(/^\/favicon.ico$/)) {
+    if(!req.url.match(/^\/\?/)) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('not found');
         return
     }
 
     // 验权位置
-    const options = {
-        hostname: 'api.github.com',
-        port: 443,
-        path: '/user',
-        method: 'GET',
-        headers: {
-            Authorization: 'token ' + req.headers.token,
-            'User-Agent': 'toy-publish-server'
-        }
-    };
-    const httpsReq = https.request(options, (httpsRes) => { 
-        let body = ''
-        httpsRes.on('data', (d) => {
-            body += d.toString()
-        })
-        httpsRes.on('end', () => {
-            let user = JSON.parse(body)
-            console.log(user) // 可以做权限检查
-
-            // 权限检查通过后接受数据处理
-            // unzip解压处理
-            let writestream = unzip.Extract({ path: '../server/public' });
-            req.pipe(writestream);
-            
-        })
-
-    })
-
-    httpsReq.on('error', (e) => {
-        console.error(e);
-    });
-    httpsReq.end();
-
-    req.on('end', () => {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('okay');
-    });
+    userJurisdiction(req, res)
 
 });
 
@@ -63,7 +27,6 @@ function auth(req, res) {
     const client_secret = '08be1fb7bc336f148a0aecb1c1a4fe817048ea77'
     const redirect_uri = encodeURIComponent('http://localhost:9091/auth')
     const params = `client_secret=${client_secret}&redirect_uri=${redirect_uri}&code=${code}&client_id=${client_id}&state=${state}`
-    // let url = `https://github.com/login/oauth/access_token?${params}`
 
     const options = {
         hostname: 'github.com',
@@ -100,6 +63,43 @@ function auth(req, res) {
     });
     httpsReq.end();
     
+}
+
+function userJurisdiction(req, res) {
+    const options = {
+        hostname: 'api.github.com',
+        port: 443,
+        path: '/user',
+        method: 'GET',
+        headers: {
+            Authorization: 'token ' + req.headers.token,
+            'User-Agent': 'toy-publish-server'
+        }
+    };
+    const httpsReq = https.request(options, (httpsRes) => { 
+        let body = ''
+        httpsRes.on('data', (d) => {
+            body += d.toString()
+        })
+        httpsRes.on('end', () => {
+            let user = JSON.parse(body)
+            console.log(user) // 可以做权限检查
+
+            // 权限检查通过后接受数据处理
+            // unzip解压处理
+            let writestream = unzip.Extract({ path: '../server/public' });
+            req.pipe(writestream);
+            req.on('end', () => {
+                res.writeHead(200, { 'Content-Type': 'text/plain' });
+                res.end('okay');
+            });
+        })
+
+    })
+    httpsReq.on('error', (e) => {
+        console.error(e);
+    });
+    httpsReq.end();
 }
 
 server.listen(9091);
